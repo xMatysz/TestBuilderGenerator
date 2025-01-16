@@ -84,7 +84,7 @@ public class Generator : IIncrementalGenerator
             }
 
             indentWriter.WriteLine($"public static {builderIdentifier} Default => new {builderIdentifier}();");
-            indentWriter.WriteLine($"public partial {data.TargetType.Name} Build();");
+            indentWriter.WriteLine($"public partial {data.TargetType.ToDisplayString()} Build();");
             indentWriter.WriteLine();
 
             indentWriter.Indent--;

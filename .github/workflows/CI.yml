@@ -55,4 +55,17 @@ jobs:
           if-no-files-found: error
           retention-days: 1
           overwrite: true
-                
+      
+      - name: Generate output
+        run: echo "${{ needs.Generate_Version.outputs.build_version }}" >> $GITHUB_OUTPUT
+        
+  Deploy:
+    needs: Build
+    runs-on: ubuntu-latest
+    name: Publish ${{needs.Generate_Version.outputs.build_version}} nuget version
+    
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: "${{ needs.Build.outputs.build_version }}-artifacts"

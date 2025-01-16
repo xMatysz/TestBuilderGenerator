@@ -10,13 +10,16 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IsPackable>true</IsPackable>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    <DevelopmentDependency>true</DevelopmentDependency>
+    <DevelopmentDependency>false</DevelopmentDependency>
     <IsRoslynComponent>true</IsRoslynComponent>
 
     <PackageId>TestBuilderGenerator</PackageId>
     <Version>$(Version)</Version>
     <Author>xMatysz</Author>
-    <Product>TestBuilderGenerator</Product>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <GenerateRepositoryUrlAttribute>true</GenerateRepositoryUrlAttribute>
     <PackageOutputPath>./nupkg</PackageOutputPath>
 
   </PropertyGroup>
