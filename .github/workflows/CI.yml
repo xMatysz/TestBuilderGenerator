@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  Generate_Version:
+    runs-on: ubuntu-latest
+    outputs:
+      build_version: ${{ steps.generate_step.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Generate version
+        id: generate_step
+        run: |
+          cd src
+          dotnet tool restore
+          echo "version=$(dotnet tool run dotnet-gitversion /updateprojectfiles | jq -r .'FullSemVer')" >> $GITHUB_OUTPUT
+
+  Build:
+    needs: Generate_Version
+    runs-on: ubuntu-latest
+    name: "Build ${{needs.Generate_Version.outputs.build_version}}"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore ./src/Listly.sln
+
+      - name: Build
+        run: dotnet build ./src/Listly.sln --no-restore -c Release
+    
+      - name: Test
+        run: dotnet test ./src/Listly.sln --no-build -c Release
+      
+      - name: Publish
+        run: dotnet publish ./src/Listly.Api/Listly.Api.csproj --no-build -o ./artifacts -c Release
+        
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4.5.0
+        with:
+          name: "${{ needs.Generate_Version.outputs.build_version }}-artifacts"
+          path: "./artifacts"
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
+                
