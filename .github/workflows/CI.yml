@@ -32,8 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_version: ${{ steps.generate_output.outputs.version }}
-    outputs:
-      build_version: ${{ steps.generate_output.outputs.version }}
     name: "Build ${{needs.Generate_Version.outputs.build_version}}"
 
     steps:
