@@ -57,7 +57,7 @@ jobs:
           overwrite: true
       
       - name: Generate output
-        run: echo "${{ needs.Generate_Version.outputs.build_version }}" >> $GITHUB_OUTPUT
+        run: echo "version=${{ needs.Generate_Version.outputs.build_version }}" >> $GITHUB_OUTPUT
         
   Deploy:
     needs: Build
@@ -69,3 +69,6 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: "${{ needs.Build.outputs.build_version }}-artifacts"
+
+      - name: Push to nuget org
+        run: dotnet nuget push TestBuilderGenerator.${{ needs.Build.outputs.build_version }}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
