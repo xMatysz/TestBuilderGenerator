@@ -30,6 +30,8 @@ jobs:
   Build:
     needs: Generate_Version
     runs-on: ubuntu-latest
+    outputs:
+      build_version: ${{ steps.generate_output.outputs.version }}
     name: "Build ${{needs.Generate_Version.outputs.build_version}}"
 
     steps:
@@ -57,12 +59,13 @@ jobs:
           overwrite: true
       
       - name: Generate output
+        id: generate_output
         run: echo "version=${{ needs.Generate_Version.outputs.build_version }}" >> $GITHUB_OUTPUT
         
   Deploy:
     needs: Build
     runs-on: ubuntu-latest
-    name: Publish ${{needs.Generate_Version.outputs.build_version}} nuget version
+    name: Publish ${{needs.Build.outputs.build_version}} nuget version
     
     steps:
       - name: Download artifacts
