@@ -68,7 +68,6 @@ jobs:
     needs: Build
     runs-on: ubuntu-latest
     name: Publish ${{needs.Build.outputs.build_version}} nuget version
-    name: Publish ${{needs.Build.outputs.build_version}} nuget version
     
     steps:
       - name: Download artifacts
