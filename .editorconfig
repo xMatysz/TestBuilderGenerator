@@ -321,6 +321,9 @@ dotnet_diagnostic.SA1200.severity = none
 # SA1201: Fields must be ordered first in a class
 dotnet_diagnostic.SA1201.severity = none
 
+# SA1202: 'public' members should come before 'private' members
+dotnet_diagnostic.SA1202.severity = none
+
 # SA1204: Static elements must appear before non-static
 dotnet_diagnostic.SA1204.severity = suggestion
 
@@ -347,6 +350,9 @@ dotnet_diagnostic.SA1503.severity = warning
 
 # SA1600: Elements must be documented
 dotnet_diagnostic.SA1600.severity = none
+
+# SA1601: Partial elements should be documented
+dotnet_diagnostic.SA1601.severity = none
 
 # SA1633: File must have a header
 dotnet_diagnostic.SA1633.severity = suggestion
@@ -399,7 +405,7 @@ dotnet_diagnostic.CA1305.severity = suggestion
 dotnet_diagnostic.CA1307.severity = warning
 
 # CA1308: Normalize strings to uppercase
-dotnet_diagnostic.CA1308.severity = warning
+dotnet_diagnostic.CA1308.severity = none
 
 # CA1416: Platform compatibility (e.g., Windows-only APIs)
 dotnet_diagnostic.CA1416.severity = warning

@@ -3,7 +3,7 @@
   "profiles": {
     "Generator": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "../BuilderGenerator.Test/BuilderGenerator.Test.csproj"
+      "targetProject": "../TestBuilderGenerator.Test/TestBuilderGenerator.Test.csproj"
     }
   }
 }

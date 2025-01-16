@@ -27,12 +27,11 @@ public class Generator : IIncrementalGenerator
         context.RegisterSourceOutput(compilation, Execute);
     }
 
-    private void Execute(SourceProductionContext context,
-        (Compilation Compilation, ImmutableArray<GenerationData> Data) touple)
+    private void Execute(SourceProductionContext context, (Compilation Compilation, ImmutableArray<GenerationData> Data) touple)
     {
         var sb = new StringBuilder();
         var writer = new StringWriter(sb);
-        var indentWriter = new IndentedTextWriter(writer);
+        using var indentWriter = new IndentedTextWriter(writer);
 
         foreach (var data in touple.Data)
         {
@@ -53,7 +52,7 @@ public class Generator : IIncrementalGenerator
             }
 
             var builderIdentifier = data.Node.Identifier;
-            var accessibility = data.Node.Modifiers.First(x=>
+            var accessibility = data.Node.Modifiers.First(x =>
                 x.IsKind(SyntaxKind.PublicKeyword) ||
                 x.IsKind(SyntaxKind.InternalKeyword));
 
@@ -67,7 +66,9 @@ public class Generator : IIncrementalGenerator
                 var name = property.Name;
                 var type = property.Type;
 
+#pragma warning disable CA1308
                 var variableName = name.ToLowerInvariant();
+#pragma warning restore CA1308
                 var fieldName = $"_{variableName}";
                 indentWriter.WriteLine($"private {type} {fieldName};");
                 indentWriter.WriteLine($"public {builderIdentifier} With{name}({type} {variableName})");
@@ -117,10 +118,13 @@ public class Generator : IIncrementalGenerator
         return !classDeclaration.Modifiers.Any(SyntaxKind.PartialKeyword);
     }
 
-    private static GenerationData SyntaxProviderTransform(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
+    private static GenerationData SyntaxProviderTransform(
+        GeneratorAttributeSyntaxContext context,
+        CancellationToken cancellationToken)
     {
         var classDeclaration = context.TargetNode as ClassDeclarationSyntax;
         var targetType = context.Attributes.First().AttributeClass.TypeArguments.First();
+
         // CHECK IF MORE ATTRIBUTES
         return new GenerationData(classDeclaration, context.TargetSymbol, targetType);
     }
