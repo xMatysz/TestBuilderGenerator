@@ -9,6 +9,11 @@ public partial class Entt2Builder
 {
     public partial Entt2 Build()
     {
-        throw new NotImplementedException();
+        return new Entt2
+        {
+            Id = _id,
+            Number = _number,
+            Text = _text
+        };
     }
 }

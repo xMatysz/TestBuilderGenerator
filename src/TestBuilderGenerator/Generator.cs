@@ -1,3 +1,4 @@
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Immutable;
 using System.IO;
@@ -17,6 +18,7 @@ public class Generator : IIncrementalGenerator
     {
         context.RegisterPostInitializationOutput(PostInitializationCallback);
 
+        // TODO: DONT UPDATE WHEN NO CHANGES
         var provider = context.SyntaxProvider.ForAttributeWithMetadataName(
             CodeTemplates.AttributeIdentifier,
             SyntaxProviderPredicate,
@@ -63,15 +65,54 @@ public class Generator : IIncrementalGenerator
             var properties = data.TargetType.GetMembers().OfType<IPropertySymbol>();
             foreach (var property in properties)
             {
-                var name = property.Name;
-                var type = property.Type;
+                var propertyName = property.Name;
+                var propertyType = property.Type;
 
 #pragma warning disable CA1308
-                var variableName = name.ToLowerInvariant();
+                var variableName = propertyName.ToLowerInvariant();
 #pragma warning restore CA1308
                 var fieldName = $"_{variableName}";
-                indentWriter.WriteLine($"private {type} {fieldName};");
-                indentWriter.WriteLine($"public {builderIdentifier} With{name}({type} {variableName})");
+
+                // TODO: make type resolver
+                var defaultPropertyName = $"Default{propertyName}";
+                switch (propertyType.Name)
+                {
+                    case nameof(Guid):
+                        indentWriter.WriteLine($$"""public static {{propertyType}} {{defaultPropertyName}} { get; } = global::System.Guid.NewGuid();""");
+                        break;
+                    case nameof(Int32):
+                        indentWriter.WriteLine("#pragma warning disable CA5394");
+                        indentWriter.WriteLine($$"""public static {{propertyType}} {{defaultPropertyName}} { get; } = global::System.Random.Shared.Next();""");
+                        indentWriter.WriteLine("#pragma warning restore CA5394");
+                        break;
+                    case nameof(Int64):
+                        indentWriter.WriteLine("#pragma warning disable CA5394");
+                        indentWriter.WriteLine($$"""public static {{propertyType}} {{defaultPropertyName}} { get; } = global::System.Random.Shared.NextInt64();""");
+                        indentWriter.WriteLine("#pragma warning restore CA5394");
+                        break;
+                    case nameof(Single):
+                        indentWriter.WriteLine("#pragma warning disable CA5394");
+                        indentWriter.WriteLine($$"""public static {{propertyType}} {{defaultPropertyName}} { get; } = global::System.Random.Shared.NextSingle();""");
+                        indentWriter.WriteLine("#pragma warning restore CA5394");
+                        break;
+                    case nameof(Double):
+                        indentWriter.WriteLine("#pragma warning disable CA5394");
+                        indentWriter.WriteLine($$"""public static {{propertyType}} {{defaultPropertyName}} { get; } = global::System.Random.Shared.NextDouble();""");
+                        indentWriter.WriteLine("#pragma warning restore CA5394");
+                        break;
+                    case "string":
+                    case nameof(String):
+                        indentWriter.WriteLine($"public static {propertyType} {defaultPropertyName} => \"{defaultPropertyName}\";");
+                        break;
+                    default:
+                        indentWriter.WriteLine(propertyType.IsReferenceType
+                            ? $"public static {propertyType} {defaultPropertyName} => null;"
+                            : $"public static {propertyType} {defaultPropertyName};");
+                        break;
+                }
+
+                indentWriter.WriteLine($"private {propertyType} {fieldName} = {defaultPropertyName};");
+                indentWriter.WriteLine($"public {builderIdentifier} With{propertyName}({propertyType} {variableName})");
                 indentWriter.WriteLine("{");
                 indentWriter.Indent++;
 

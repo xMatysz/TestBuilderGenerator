@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TestBuilderGenerator\TestBuilderGenerator.csproj"
-      OutputItemType="Analyzer"/>
+                        OutputItemType="Analyzer"/>
     </ItemGroup>
 
 </Project>

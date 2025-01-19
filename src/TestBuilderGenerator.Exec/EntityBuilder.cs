@@ -7,6 +7,12 @@ public partial class EntityBuilder
 {
     public partial Entity Build()
     {
-        throw new NotImplementedException();
+        _ = _number;
+        return new Entity
+        {
+            Id = _id,
+            Number = _number,
+            Text = _text
+        };
     }
 }
