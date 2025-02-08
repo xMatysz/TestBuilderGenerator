@@ -26,10 +26,16 @@ jobs:
         with:
           useConfigFile: true
 
-      - name: Tag Build
-        run: |
-          git tag ${{ steps.version_step.outputs.majorMinorPatch }}
-          git push origin ${{ steps.version_step.outputs.majorMinorPatch }}
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ steps.version_step.outputs.majorMinorPatch }}',
+              sha: context.sha
+            })
 
   Build:
     needs: Generate_Version
