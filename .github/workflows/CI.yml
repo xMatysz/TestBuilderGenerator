@@ -8,24 +8,23 @@ jobs:
   Generate_Version:
     runs-on: ubuntu-latest
     outputs:
-      build_version: ${{ steps.generate_step.outputs.version }}
+      build_version: ${{ steps.version_step.outputs.majorMinorPatch }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup .Net
-        uses: actions/setup-dotnet@v4
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.1.11
         with:
-          dotnet-version: '8.0.x'
+          versionSpec: '6.0.x'
 
-      - name: Generate version
-        id: generate_step
-        run: |
-          cd src
-          dotnet tool restore
-          echo "version=1.0.3" >> $GITHUB_OUTPUT
+      - name: Determine Version
+        id: version_step # step id used as reference for output values
+        uses: gittools/actions/gitversion/execute@v3.1.11
+        with:
+          useConfigFile: true
 
   Build:
     needs: Generate_Version
