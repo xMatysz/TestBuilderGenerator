@@ -26,6 +26,11 @@ jobs:
         with:
           useConfigFile: true
 
+      - name: Tag Build
+        run: |
+          git tag ${{ steps.version_step.outputs.majorMinorPatch }}
+          git push origin ${{ steps.version_step.outputs.majorMinorPatch }}
+
   Build:
     needs: Generate_Version
     runs-on: ubuntu-latest
