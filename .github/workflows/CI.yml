@@ -34,7 +34,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: 'refs/tags/${{ steps.version_step.outputs.majorMinorPatch }}',
-              sha: github.sha
+              sha: ${{ steps.version_step.outputs.sha }}
             })
 
   Build:
