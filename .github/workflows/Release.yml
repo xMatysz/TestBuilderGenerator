@@ -26,4 +26,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push to nuget org
-        run: dotnet nuget push TestBuilderGenerator.${{ inputs.version }}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --skip-duplicate
+        run: dotnet nuget push TestBuilderGenerator.${{ inputs.version }}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
