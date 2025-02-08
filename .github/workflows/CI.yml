@@ -30,11 +30,20 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const { data: tagObject } = await github.rest.git.createTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ${{ steps.version_step.outputs.majorMinorPatch }},
+              "New tag",
+              object: ${{ steps.version_step.outputs.sha }},
+              type: "commit"
+            });
+
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: 'refs/tags/${{ steps.version_step.outputs.majorMinorPatch }}',
-              sha: ${{ steps.version_step.outputs.sha }}
+              sha: tagObject.sha
             })
 
   Build:
