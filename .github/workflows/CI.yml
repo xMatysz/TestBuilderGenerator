@@ -33,9 +33,9 @@ jobs:
             const { data: tagObject } = await github.rest.git.createTag({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ${{ steps.version_step.outputs.majorMinorPatch }},
+              '${{ steps.version_step.outputs.majorMinorPatch }}',
               "New tag",
-              object: ${{ steps.version_step.outputs.sha }},
+              object: '${{ steps.version_step.outputs.sha }}',
               type: "commit"
             });
 
