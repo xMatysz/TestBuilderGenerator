@@ -1,2 +1,5 @@
 workflow: GitHubFlow/v1
 tag-prefix: '[abc]'
+major-version-bump-message: "major:"
+minor-version-bump-message: "feature:"
+patch-version-bump-message: "fix:"
