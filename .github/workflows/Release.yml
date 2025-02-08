@@ -20,4 +20,4 @@ jobs:
           name: "${{ inputs.version }}-artifacts"
 
       - name: Push to nuget org
-        run: dotnet nuget push TestBuilderGenerator.${{ inputs.version }}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push TestBuilderGenerator.${{ inputs.version }}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --source "github" --skip-duplicate
