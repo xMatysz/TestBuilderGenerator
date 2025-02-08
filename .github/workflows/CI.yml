@@ -27,10 +27,10 @@ jobs:
           useConfigFile: true
 
       - name: Create tag
-        uses: actions/github-script@v5
+        uses: actions/github-script@v7
         with:
           script: |
-            github.rest.git.createRef({
+            octokit.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: 'refs/tags/${{ steps.version_step.outputs.majorMinorPatch }}',
