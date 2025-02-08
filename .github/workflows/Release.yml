@@ -10,7 +10,7 @@ on:
       run_id:
         description: Run id where artifacts are stored
         required: true
-        type: number
+        type: string
 
 jobs:
   Deploy:
@@ -27,6 +27,7 @@ jobs:
         with:
           name: "${{ inputs.version }}-artifacts"
           run-id: '${{ inputs.run_id }}'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push to nuget org
         run: dotnet nuget push TestBuilderGenerator.${{ inputs.version }}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --source "github" --skip-duplicate
