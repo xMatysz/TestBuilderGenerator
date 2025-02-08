@@ -14,6 +14,10 @@ jobs:
     name: Publish ${{inputs.version}} nuget version
 
     steps:
+      - uses: actions/download-artifact@v4
+      - name: Display structure of downloaded files
+        run: ls -R
+
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
