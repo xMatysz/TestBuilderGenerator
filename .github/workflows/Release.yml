@@ -27,5 +27,5 @@ jobs:
 
       - name: Push to nuget org
         run: |
-          dotnet nuget add source --username xMatysz --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/OWNER/index.json"
+          dotnet nuget add source --username xMatysz --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/xMatysz/index.json"
           dotnet nuget push TestBuilderGenerator.${{ inputs.version }}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source "github" --skip-duplicate
