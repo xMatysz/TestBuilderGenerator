@@ -69,7 +69,11 @@ public class Generator : IIncrementalGenerator
             var builderProperties = data.Node.Members
                 .OfType<PropertyDeclarationSyntax>()
                 .ToArray();
-            var properties = data.TargetType.GetMembers().OfType<IPropertySymbol>();
+
+            var properties = data.TargetType
+                .GetMembers()
+                .OfType<IPropertySymbol>();
+
             foreach (var property in properties)
             {
                 var propertyName = property.Name;
