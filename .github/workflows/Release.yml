@@ -1,0 +1,23 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to Deploy
+        required: true
+        type: string
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    name: Publish ${{inputs.version}} nuget version
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: "${{ inputs.version }}-artifacts"
+
+      - name: Push to nuget org
+        run: dotnet nuget push TestBuilderGenerator.${{ inputs.version }}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate

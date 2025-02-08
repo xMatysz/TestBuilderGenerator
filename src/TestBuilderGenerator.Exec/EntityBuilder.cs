@@ -1,4 +1,7 @@
-namespace TestBuilderGenerator.Exec;
+using EntityNamespace;
+using TestBuilderGenerator;
+
+namespace BuilderNamespace;
 
 #pragma warning disable SA1015
 [TestBuilderGenOf<Entity>]
@@ -7,12 +10,6 @@ public partial class EntityBuilder
 {
     public partial Entity Build()
     {
-        _ = _number;
-        return new Entity
-        {
-            Id = _id,
-            Number = _number,
-            Text = _text
-        };
+        throw new System.NotImplementedException();
     }
 }

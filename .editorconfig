@@ -1,8 +1,12 @@
 # .editorconfig for .NET projects with all .NET Code Style (IDE) rules, StyleCop rules, and additional code style settings
 root = true
 
-# Global settings for all file types
-[*]
+[*.{csproj, Build.props, json, yml, yaml}]
+indent_size = 2
+tab_width = 2
+
+[*.cs]
+
 charset = utf-8
 indent_style = space
 indent_size = 4
@@ -10,12 +14,6 @@ tab_width = 4
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
-
-[*.{csproj, Build.props, json, yml, yaml}]
-indent_size = 2
-tab_width = 2
-
-[*.cs]
 
 # Code Style: C# - Expression-bodied members
 csharp_style_expression_bodied_constructors = false
@@ -452,6 +450,7 @@ dotnet_diagnostic.S3604.severity = none
 dotnet_diagnostic.S4035.severity = none
 
 [**/*Tests*/**/*.cs]
+[**/*Tests.cs]
 
 # CA1822: Member 'ValidateItem' does not access instance data and can be marked as static
 dotnet_diagnostic.CA1822.severity = none

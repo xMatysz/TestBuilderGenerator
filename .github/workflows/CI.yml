@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
 
 jobs:
   Generate_Version:
@@ -30,8 +30,6 @@ jobs:
   Build:
     needs: Generate_Version
     runs-on: ubuntu-latest
-    outputs:
-      build_version: ${{ steps.generate_output.outputs.version }}
     name: "Build ${{needs.Generate_Version.outputs.build_version}}"
 
     steps:
@@ -48,7 +46,7 @@ jobs:
 
       - name: Build
         run: dotnet build ./src/TestBuilderGenerator.sln --no-restore -c Release /p:Version=${{needs.Generate_Version.outputs.build_version}}
-        
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.5.0
         with:
@@ -57,21 +55,3 @@ jobs:
           if-no-files-found: error
           retention-days: 1
           overwrite: true
-      
-      - name: generate_output
-        id: generate_output
-        run: echo "version=${{ needs.Generate_Version.outputs.build_version }}" >> $GITHUB_OUTPUT
-        
-  Deploy:
-    needs: Build
-    runs-on: ubuntu-latest
-    name: Publish ${{needs.Build.outputs.build_version}} nuget version
-    
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: "${{ needs.Build.outputs.build_version }}-artifacts"
-
-      - name: Push to nuget org
-        run: dotnet nuget push TestBuilderGenerator.${{ needs.Build.outputs.build_version }}.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
