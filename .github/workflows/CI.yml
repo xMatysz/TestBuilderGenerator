@@ -26,16 +26,11 @@ jobs:
         with:
           useConfigFile: true
 
-      - name: Create tag
-        uses: actions/github-script@v7
+      - name: Bump version and push tag
+        uses: laputansoft/github-tag-action@v4.6
         with:
-          script: |
-            octokit.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/${{ steps.version_step.outputs.majorMinorPatch }}',
-              sha: context.sha
-            })
+          github_token: ${{ env.github-token }}
+          tag: ${{ steps.version_step.outputs.majorMinorPatch }}
 
   Build:
     needs: Generate_Version
