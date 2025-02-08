@@ -96,8 +96,8 @@ public class Generator : IIncrementalGenerator
 
                 var fixedPropertyType = $"{propertyType}{(addNullable ? "?" : string.Empty)}";
                 var defaultPropertyName = $"Default{data.TargetType.MetadataName}{propertyName}";
-                var hasDefaultDefined = builderProperties.Any(x => x.Identifier.ValueText == defaultPropertyName);
-                if (!hasDefaultDefined)
+                var hasAlreadyDefiniedDefault = builderProperties.Any(x => x.Identifier.ValueText == defaultPropertyName);
+                if (!hasAlreadyDefiniedDefault)
                 {
                     indentWriter.Write($"public static {fixedPropertyType} {defaultPropertyName} {{ get; }} = ");
                     switch (propertyType.Name)
