@@ -70,6 +70,10 @@ public class Generator : IIncrementalGenerator
                 .OfType<PropertyDeclarationSyntax>()
                 .ToArray();
 
+            var builderMethods = data.Node.Members
+                .OfType<MethodDeclarationSyntax>()
+                .ToArray();
+
             var properties = data.TargetType
                 .GetMembers()
                 .OfType<IPropertySymbol>();
@@ -96,8 +100,8 @@ public class Generator : IIncrementalGenerator
 
                 var fixedPropertyType = $"{propertyType}{(addNullable ? "?" : string.Empty)}";
                 var defaultPropertyName = $"Default{data.TargetType.MetadataName}{propertyName}";
-                var hasAlreadyDefiniedDefault = builderProperties.Any(x => x.Identifier.ValueText == defaultPropertyName);
-                if (!hasAlreadyDefiniedDefault)
+                var hasAlreadyDefinedDefaultProperty = builderProperties.Any(x => x.Identifier.ValueText == defaultPropertyName);
+                if (!hasAlreadyDefinedDefaultProperty)
                 {
                     indentWriter.Write($"public static {fixedPropertyType} {defaultPropertyName} {{ get; }} = ");
                     switch (propertyType.Name)
@@ -128,16 +132,22 @@ public class Generator : IIncrementalGenerator
                 }
 
                 indentWriter.WriteLine($"private {fixedPropertyType} {fieldName} = {defaultPropertyName};");
-                indentWriter.WriteLine(
-                    $"public {builderIdentifier} With{propertyName}({fixedPropertyType} {variableName})");
-                indentWriter.WriteLine("{");
-                indentWriter.Indent++;
+                var methodName = $"With{propertyName}";
+                var hasAlreadyDefinedMethod = builderMethods.Any(x => x.Identifier.ValueText == methodName);
+                if (!hasAlreadyDefinedMethod)
+                {
+                    indentWriter.WriteLine(
+                        $"public {builderIdentifier} {methodName}({fixedPropertyType} {variableName})");
+                    indentWriter.WriteLine("{");
+                    indentWriter.Indent++;
 
-                indentWriter.WriteLine($"{fieldName} = {variableName};");
-                indentWriter.WriteLine("return this;");
+                    indentWriter.WriteLine($"{fieldName} = {variableName};");
+                    indentWriter.WriteLine("return this;");
 
-                indentWriter.Indent--;
-                indentWriter.WriteLine("}");
+                    indentWriter.Indent--;
+                    indentWriter.WriteLine("}");
+                }
+
                 indentWriter.WriteLineNoTabs(string.Empty);
             }
 
