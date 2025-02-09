@@ -118,6 +118,16 @@ public class Generator : IIncrementalGenerator
                         case nameof(String) when propertyType.NullableAnnotation != NullableAnnotation.Annotated:
                             indentWriter.WriteLine($"\"{defaultPropertyName}\";");
                             break;
+                        case nameof(DateTime):
+                            indentWriter.WriteLine("global::System.DateTime.UtcNow;");
+                            break;
+                        case nameof(DateTimeOffset):
+                            indentWriter.WriteLine("global::System.DateTimeOffset.UtcNow;");
+                            break;
+                        case "" when propertyType.Kind == SymbolKind.ArrayType:
+                        case not "" when propertyType.ContainingNamespace.ToDisplayString().Equals("System.Collections.Generic", StringComparison.Ordinal):
+                            indentWriter.WriteLine("[];");
+                            break;
                         default:
                             indentWriter.WriteLine("default;");
                             break;
