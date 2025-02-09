@@ -146,15 +146,15 @@ public class GeneratorTests
                     return this;
                 }
 
-                public static string? DefaultEntityPredefinedRefProp { get; } = "DefaultEntityPredefinedRefProp";
-                private string? _predefinedRefProp = DefaultEntityPredefinedRefProp;
-                public EntityBuilder WithPredefinedRefProp(string? predefinedRefProp)
+                public static string DefaultEntityPredefinedRefProp { get; } = "DefaultEntityPredefinedRefProp";
+                private string _predefinedRefProp = DefaultEntityPredefinedRefProp;
+                public EntityBuilder WithPredefinedRefProp(string predefinedRefProp)
                 {
                     _predefinedRefProp = predefinedRefProp;
                     return this;
                 }
 
-                public static string? DefaultEntityPredefinedRefPropNullable { get; } = "DefaultEntityPredefinedRefPropNullable";
+                public static string? DefaultEntityPredefinedRefPropNullable { get; } = default;
                 private string? _predefinedRefPropNullable = DefaultEntityPredefinedRefPropNullable;
                 public EntityBuilder WithPredefinedRefPropNullable(string? predefinedRefPropNullable)
                 {

@@ -86,24 +86,17 @@ public class Generator : IIncrementalGenerator
                 var variableName = propertyName.ToCamelCase();
                 var fieldName = $"_{variableName}";
 
-                var addNullable = propertyType is
-                {
-                    IsReferenceType: true,
-                    NullableAnnotation: NullableAnnotation.NotAnnotated or NullableAnnotation.None
-                };
-
 #pragma warning disable S125
 
                 // EXPERIMENTAL
                 // indentWriter.WriteLine($"public partial {fixedPropertyType} Default{propertyName} {{ get; }}");
 #pragma warning restore S125
 
-                var fixedPropertyType = $"{propertyType}{(addNullable ? "?" : string.Empty)}";
                 var defaultPropertyName = $"Default{data.TargetType.MetadataName}{propertyName}";
                 var hasAlreadyDefinedDefaultProperty = builderProperties.Any(x => x.Identifier.ValueText == defaultPropertyName);
                 if (!hasAlreadyDefinedDefaultProperty)
                 {
-                    indentWriter.Write($"public static {fixedPropertyType} {defaultPropertyName} {{ get; }} = ");
+                    indentWriter.Write($"public static {propertyType} {defaultPropertyName} {{ get; }} = ");
                     switch (propertyType.Name)
                     {
                         case nameof(Guid):
@@ -122,7 +115,7 @@ public class Generator : IIncrementalGenerator
                             indentWriter.WriteLine("global::System.Random.Shared.NextDouble();");
                             break;
                         case "string":
-                        case nameof(String):
+                        case nameof(String) when propertyType.NullableAnnotation != NullableAnnotation.Annotated:
                             indentWriter.WriteLine($"\"{defaultPropertyName}\";");
                             break;
                         default:
@@ -131,13 +124,13 @@ public class Generator : IIncrementalGenerator
                     }
                 }
 
-                indentWriter.WriteLine($"private {fixedPropertyType} {fieldName} = {defaultPropertyName};");
+                indentWriter.WriteLine($"private {propertyType} {fieldName} = {defaultPropertyName};");
                 var methodName = $"With{propertyName}";
                 var hasAlreadyDefinedMethod = builderMethods.Any(x => x.Identifier.ValueText == methodName);
                 if (!hasAlreadyDefinedMethod)
                 {
                     indentWriter.WriteLine(
-                        $"public {builderIdentifier} {methodName}({fixedPropertyType} {variableName})");
+                        $"public {builderIdentifier} {methodName}({propertyType} {variableName})");
                     indentWriter.WriteLine("{");
                     indentWriter.Indent++;
 
