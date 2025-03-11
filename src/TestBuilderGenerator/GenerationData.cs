@@ -5,10 +5,10 @@ namespace TestBuilderGenerator;
 
 public record GenerationData(
     ClassDeclarationSyntax Node,
-    ISymbol Symbol,
+    INamespaceSymbol ContainingNamespace,
     ITypeSymbol TargetType)
 {
     public ClassDeclarationSyntax Node { get; } = Node;
-    public ISymbol Symbol { get; } = Symbol;
+    public INamespaceSymbol ContainingNamespace { get; } = ContainingNamespace;
     public ITypeSymbol TargetType { get; } = TargetType;
 }
