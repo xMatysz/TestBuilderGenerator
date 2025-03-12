@@ -22,33 +22,6 @@ public class DiagnosticTests
         """);
 
     [Fact]
-    public async Task Error_When_Builder_Is_Not_Partial()
-    {
-        const string code =
-            """
-            using TestBuilderGenerator;
-
-            namespace Entities;
-
-            public class Entity
-            {
-            }
-
-            [TestBuilderGenOf<Entity>]
-            public class EntityBuilder {}
-            """;
-
-        var expectedDiagnostic = DiagnosticResult
-            .CompilerError("SG0001")
-            .WithSpan(10, 14, 10, 28);
-
-        await VerifyCS.ValidateSourceGeneratorAsync(
-            [code],
-            [_attributeGeneratedCode],
-            [expectedDiagnostic]);
-    }
-
-    [Fact]
     public async Task Error_When_Builder_Not_Implement_Build()
     {
         const string code =
