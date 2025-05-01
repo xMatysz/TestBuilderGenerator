@@ -17,7 +17,7 @@ public static class CodeTemplates
           namespace {{NamespaceName}};
 
           [global::System.CodeDom.Compiler.GeneratedCode("TestBuilderGenerator", "1.0.0.0")]
-          [global::System.AttributeUsage(global::System.AttributeTargets.Class, AllowMultiple = true)]
+          [global::System.AttributeUsage(global::System.AttributeTargets.Class, AllowMultiple = false)]
           internal sealed class {{AttributeClassName}}<T> : global::System.Attribute
           {
           }

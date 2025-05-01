@@ -10,7 +10,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TestBuilderGenerator\TestBuilderGenerator.csproj"
-                      OutputItemType="Analyzer"/>
+                      OutputItemType="Analyzer" />
+
+  </ItemGroup>
+
+<!-- TestBuilderGenerator Configuration -->
+  <ItemGroup>
+    <CompilerVisibleProperty Include="TestBuilderGenerator_PrintDateTime"/>
   </ItemGroup>
 
 </Project>

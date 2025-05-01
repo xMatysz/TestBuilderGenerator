@@ -84,7 +84,7 @@ public class GeneratorTests
     [Theory]
     [InlineData("int", "global::System.Random.Shared.Next()")]
     [InlineData("int?", "default")]
-    [InlineData("string", "\"DefaultEntityPropName\"")]
+    [InlineData("string", "\"DefaultPropName\"")]
     [InlineData("string?", "default")]
     [InlineData("int[]", "[]")]
     [InlineData("int?[]", "[]")]
@@ -93,6 +93,8 @@ public class GeneratorTests
     [InlineData("System.Collections.Generic.ICollection<int>", "[]")]
     [InlineData("System.Collections.Generic.IList<int>", "[]")]
     [InlineData("System.Collections.Generic.IReadOnlyCollection<int>", "[]")]
+    [InlineData("bool", "false")]
+    [InlineData("System.Guid", "global::System.Guid.NewGuid()")]
     public async Task Generate_Property_Setup(string propertyType, string defaultPropertyType)
     {
         var code1 =
@@ -138,8 +140,8 @@ public class GeneratorTests
 
               public partial class EntityBuilder
               {
-                  public static {{propertyType}} DefaultEntityPropName { get; } = {{defaultPropertyType}};
-                  private {{propertyType}} _propName = DefaultEntityPropName;
+                  public static {{propertyType}} DefaultPropName { get; } = {{defaultPropertyType}};
+                  private {{propertyType}} _propName = DefaultPropName;
                   public EntityBuilder WithPropName({{propertyType}} propName)
                   {
                       _propName = propName;
@@ -186,7 +188,7 @@ public class GeneratorTests
             [TestBuilderGenOf<Entity>]
             public partial class EntityBuilder
             {
-                public static int DefaultEntityPredefinedStructProp => 11;
+                public static int DefaultPredefinedStructProp => 11;
 
                 public partial Entity Build()
                 {
@@ -206,7 +208,7 @@ public class GeneratorTests
 
             public partial class EntityBuilder
             {
-                private int _predefinedStructProp = DefaultEntityPredefinedStructProp;
+                private int _predefinedStructProp = DefaultPredefinedStructProp;
                 public EntityBuilder WithPredefinedStructProp(int predefinedStructProp)
                 {
                     _predefinedStructProp = predefinedStructProp;
@@ -276,8 +278,8 @@ public class GeneratorTests
 
             public partial class EntityBuilder
             {
-                public static int DefaultEntityPredefinedStructProp { get; } = global::System.Random.Shared.Next();
-                private int _predefinedStructProp = DefaultEntityPredefinedStructProp;
+                public static int DefaultPredefinedStructProp { get; } = global::System.Random.Shared.Next();
+                private int _predefinedStructProp = DefaultPredefinedStructProp;
 
                 public static EntityBuilder Default => new EntityBuilder();
                 public partial EntityNamespace.Entity Build();
