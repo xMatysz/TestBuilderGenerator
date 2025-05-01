@@ -13,7 +13,7 @@ public class GeneratorTests
         namespace TestBuilderGenerator;
 
         [global::System.CodeDom.Compiler.GeneratedCode("TestBuilderGenerator", "1.0.0.0")]
-        [global::System.AttributeUsage(global::System.AttributeTargets.Class, AllowMultiple = true)]
+        [global::System.AttributeUsage(global::System.AttributeTargets.Class, AllowMultiple = false)]
         internal sealed class TestBuilderGenOfAttribute<T> : global::System.Attribute
         {
         }
